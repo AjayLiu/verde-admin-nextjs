@@ -24,8 +24,8 @@ interface Challenge {
 const Home = () => {
   const [challengeData, setChallengeData] = useState<Challenge>();
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date().setHours(0, 0, 0));
+  const [endDate, setEndDate] = useState(new Date().setHours(0, 0, 0));
 
   const saveChallenge = async () => {
     try {
@@ -108,11 +108,11 @@ const Home = () => {
             <label>Start time</label>
             <DateTimePicker
               value={startDate}
-              onChange={() => {
-                setStartDate(startDate);
+              onChange={(e) => {
+                setStartDate(e);
                 setChallengeData({
                   ...challengeData,
-                  startTime: Timestamp.fromDate(startDate),
+                  startTime: Timestamp.fromDate(e),
                 });
               }}
             />
@@ -121,11 +121,11 @@ const Home = () => {
             <label>End time</label>
             <DateTimePicker
               value={endDate}
-              onChange={() => {
-                setStartDate(endDate);
+              onChange={(e) => {
+                setEndDate(e);
                 setChallengeData({
                   ...challengeData,
-                  expirationTime: Timestamp.fromDate(endDate),
+                  expirationTime: Timestamp.fromDate(e),
                 });
               }}
             />
