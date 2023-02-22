@@ -1,38 +1,61 @@
 import Head from "next/head";
 import Footer from "@components/Footer/Footer";
-import GoogleAnalyticsHook from "@components/GoogleAnalyticsHook";
+import { useEffect, useState } from "react";
+import { Timestamp, setDoc, doc } from "firebase/firestore";
+import { uuidv4 } from "@firebase/util";
+import { database } from "src/config/firebase";
 
-const Home: React.FC = () => {
+interface Challenge {
+  uid: string;
+  title: string;
+  description: string;
+  points: number;
+  startTime: Timestamp;
+  expirationTime: Timestamp;
+}
+
+const Home = () => {
+  const [challengeData, setChallengeData] = useState<Challenge>({
+    uid: "test",
+    title: "test",
+    description: "test",
+    points: 10,
+    startTime: Timestamp.now(),
+    expirationTime: Timestamp.now(),
+  });
+
+  const saveChallenge = async () => {
+    try {
+      console.log(challengeData);
+      const postDocRef = await setDoc(
+        doc(database, "challenges", uuidv4()),
+        challengeData
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      <GoogleAnalyticsHook />
-      <div className="container">
-        <Head>
-          <title>Ajay Liu</title>
-          <link rel="icon" href="/favicon.ico" />
-          <meta
-            name="Description"
-            content="My name is Ajay Liu and I love creating
-          things!"
-          />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta property="og:title" content="Ajay Liu" />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://ajayliu.com/" />
-          <meta
-            property="og:image"
-            content="https://ajayliu.com/imgs/ajayliudark.png"
-          />
-          <meta
-            property="og:description"
-            content="My name is Ajay Liu and I love creating things!"
-          />
-        </Head>
+      <Head>
+        <title>Verde Admin</title>
+      </Head>
 
-        <main></main>
+      <main>
+        <div>
+          <input
+            placeholder="Enter the Title.."
+            onChange={(e) =>
+              setChallengeData({ ...challengeData, title: e.target.value })
+            }
+            value={challengeData?.title}
+          />
+          <button onClick={() => saveChallenge()}>Save challenge</button>
+        </div>
+      </main>
 
-        <Footer />
-      </div>
+      <Footer />
     </>
   );
 };
