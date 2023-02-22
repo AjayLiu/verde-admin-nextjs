@@ -22,12 +22,12 @@ interface Challenge {
 }
 
 const Home = () => {
-  const [challengeData, setChallengeData] = useState<Challenge>();
-
   // const [startDate, setStartDate] = useState(new Date().setHours(0, 0, 0, 0));
   // const [endDate, setEndDate] = useState(new Date().setHours(0, 0, 0, 0));
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
+
+  const [challengeData, setChallengeData] = useState<Challenge>();
 
   const [startDate, setStartDate] = useState(todayMidnight);
   const [endDate, setEndDate] = useState(todayMidnight);
@@ -39,6 +39,8 @@ const Home = () => {
     try {
       const uuid = uuidv4();
       const postDocRef = await setDoc(doc(database, "challenges", uuid), {
+        startTime: Timestamp.fromDate(todayMidnight),
+        expirationTime: Timestamp.fromDate(todayMidnight),
         ...challengeData,
         uid: uuid,
       });
