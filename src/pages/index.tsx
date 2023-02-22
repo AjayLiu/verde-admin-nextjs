@@ -24,16 +24,24 @@ interface Challenge {
 const Home = () => {
   const [challengeData, setChallengeData] = useState<Challenge>();
 
-  const [startDate, setStartDate] = useState(new Date().setHours(0, 0, 0));
-  const [endDate, setEndDate] = useState(new Date().setHours(0, 0, 0));
+  // const [startDate, setStartDate] = useState(new Date().setHours(0, 0, 0, 0));
+  // const [endDate, setEndDate] = useState(new Date().setHours(0, 0, 0, 0));
+  const todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
+
+  const [startDate, setStartDate] = useState(todayMidnight);
+  const [endDate, setEndDate] = useState(todayMidnight);
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
+  // useEffect(() => {}, []);
 
   const saveChallenge = async () => {
     try {
-      console.log(challengeData);
-      const postDocRef = await setDoc(
-        doc(database, "challenges", uuidv4()),
-        challengeData
-      );
+      const uuid = uuidv4();
+      const postDocRef = await setDoc(doc(database, "challenges", uuid), {
+        ...challengeData,
+        uid: uuid,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -143,7 +151,7 @@ const Home = () => {
                       uid: {c.uid}, title: {c.title}, description:{" "}
                       {c.description}, points: {c.points}, start:
                       {c.startTime.toDate().toLocaleString()}, end:
-                      {c.expirationTime.toDate().toLocaleDateString()}
+                      {c.expirationTime.toDate().toLocaleString()}
                     </p>
                   </div>
                 );
