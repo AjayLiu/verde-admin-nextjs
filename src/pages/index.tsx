@@ -16,14 +16,13 @@ interface Challenge {
   uid: string;
   title: string;
   description: string;
+  impact: string;
   points: number;
   startTime: Timestamp;
   expirationTime: Timestamp;
 }
 
 const Home = () => {
-  // const [startDate, setStartDate] = useState(new Date().setHours(0, 0, 0, 0));
-  // const [endDate, setEndDate] = useState(new Date().setHours(0, 0, 0, 0));
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
 
@@ -31,9 +30,6 @@ const Home = () => {
 
   const [startDate, setStartDate] = useState(todayMidnight);
   const [endDate, setEndDate] = useState(todayMidnight);
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
-  // useEffect(() => {}, []);
 
   const saveChallenge = async () => {
     try {
@@ -101,6 +97,19 @@ const Home = () => {
             />
           </div>
           <div>
+            <label>Challenge Impact</label>
+            <input
+              placeholder="Challenge Impact"
+              onChange={(e) =>
+                setChallengeData({
+                  ...challengeData,
+                  impact: e.target.value,
+                })
+              }
+              value={challengeData?.impact}
+            />
+          </div>
+          <div>
             <label>Challenge Points</label>
             <input
               placeholder="Challenge Points"
@@ -151,7 +160,8 @@ const Home = () => {
                   <div>
                     <p>
                       uid: {c.uid}, title: {c.title}, description:{" "}
-                      {c.description}, points: {c.points}, start:
+                      {c.description}, impact: {c.impact}, points: {c.points},
+                      start:
                       {c.startTime.toDate().toLocaleString()}, end:
                       {c.expirationTime.toDate().toLocaleString()}
                     </p>
